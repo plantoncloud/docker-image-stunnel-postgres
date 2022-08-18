@@ -1,10 +1,18 @@
-# stunnel
+# stunnel-postgres
 
-This docker image is to be used for runing sidecar container for microservices that require connectivity to postgres clusters which are running in planton cloud hosting environments to avoid StartTLS problem.
+This project is an interim solution until support for StartTLS lands in istio which is being tracked in [add postgres StartTLS proxying](https://github.com/istio/istio/issues/29761) github issue. 
+
+Any postgres client trying to connect to postgres servers running on planton cloud managed hosting environments fails to connect for the reason explained in this [github issue](https://github.com/traefik/traefik/pull/8935). So, clients should use stunnel to be able to successfully connect to the postgres server. The server would also run stunnel alongside postgres to terminate the ssl requests from stunnel clients.
+
+## client
+
+This docker image is to be used for running as a sidecar container for microservices that require connectivity to postgres clusters which are running in planton cloud hosting environments to avoid StartTLS problem.
+
+## server
 
 The docker image also includes a startup script that is required to setup the stunnel configuration file. The startup requires the following environment variables to be set to successfully generate the configuration file.
 
-# environment variables
+## environment variables
 
 ### STUNNEL_MODE
 
@@ -26,21 +34,11 @@ The port on the destination server to proxy the incoming connections.
 
 The log level mode can be set to `warn` or `debug`
 
-## client config file
+## config file
 
-The client stunnel config file is used by the sidecar container in grpc microservices that connect to a postgres cluster running on on a planton cloud managed hosting environment.
+A config file is required to start stunnel process. This config file is passed as a command-line argument to stunnel command to start the process. The config file contains the information required for proxying the requests between postgres client and postgres server.
 
-```
-; log level. warn=4, debug=7
-debug = 7
-foreground = yes
-[proxy]
-client = yes
-accept = 0.0.0.0:5432
-connect = <postgres-cluster-internal-or-external-endpoint>:5432
-```
-
-## server config file
+### server config file
 
 This config file is used inside the sidecar container for the postgres cluster created by the postgres-operator. The sidecar container requires the CA certificate pem file to be mounted to `/server/ca.pem` path.
 
@@ -53,6 +51,20 @@ accept = 0.0.0.0:15432
 connect = localhost:5432
 ; the server-ca.pem contains the private key, server certificate, and the CA root certificate
 cert = /server/ca.pem
+```
+
+### client config file
+
+The client stunnel config file is used by the sidecar container in grpc microservices that connect to a postgres cluster running on on a planton cloud managed hosting environment.
+
+```
+; log level. warn=4, debug=7
+debug = 7
+foreground = yes
+[proxy]
+client = yes
+accept = 0.0.0.0:5432
+connect = <postgres-cluster-internal-or-external-endpoint>:5432
 ```
 
 ## gomplate
