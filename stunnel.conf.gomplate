@@ -1,0 +1,14 @@
+; log level. warn=4, debug=7
+{{ if eq .Env.STUNNEL_LOG_LEVEL "debug" }}
+debug = 7
+{{ else }}
+debug = 4
+{{ end }}
+foreground = yes
+[proxy]
+accept = 0.0.0.0:{{ .Env.STUNNEL_ACCEPT_PORT }}
+connect = {{ .Env.STUNNEL_FORWARD_HOST }}:{{ .Env.STUNNEL_FORWARD_PORT }}
+{{ if eq .Env.STUNNEL_MODE "server" }}
+; the server-ca.pem contains the private key, server certificate, and the CA root certificate
+cert = /server/ca.pem
+{{ end }}
