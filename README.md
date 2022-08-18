@@ -1,8 +1,26 @@
 # stunnel-postgres
 
-This project is an interim solution until support for StartTLS lands in istio which is being tracked in [add postgres StartTLS proxying](https://github.com/istio/istio/issues/29761) github issue. 
+## problem
 
 Any postgres client trying to connect to postgres servers running on planton cloud managed hosting environments fails to connect for the reason explained in this [github issue](https://github.com/traefik/traefik/pull/8935). So, clients should use stunnel to be able to successfully connect to the postgres server. The server would also run stunnel alongside postgres to terminate the ssl requests from stunnel clients.
+
+![does-not-work](docs/image/00-does-not-work.jpg)
+
+## solution
+
+This project is an interim solution until support for StartTLS lands in istio which is being tracked in [add postgres StartTLS proxying](https://github.com/istio/istio/issues/29761) github issue. 
+
+### mac clients (datagrip/psql)
+
+![mac-clients](docs/image/01-with-mac-client.jpg)
+
+### build engine
+
+![build-engine](docs/image/02-with-sidecar-on-build-engine.jpg)
+
+### microservices on cora
+
+![microservices-on-cora](docs/image/03-with-sidecar-on-cora.jpg)
 
 ## client
 
