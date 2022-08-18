@@ -6,6 +6,11 @@ debug = 4
 {{ end }}
 foreground = yes
 [proxy]
+{{ if eq .Env.STUNNEL_MODE "server" }}
+client = no
+{{ else }}
+client = yes
+{{ end }}
 accept = 0.0.0.0:{{ .Env.STUNNEL_ACCEPT_PORT }}
 connect = {{ .Env.STUNNEL_FORWARD_HOST }}:{{ .Env.STUNNEL_FORWARD_PORT }}
 {{ if eq .Env.STUNNEL_MODE "server" }}
