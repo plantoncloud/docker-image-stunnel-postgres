@@ -11,3 +11,8 @@ build:
 .PHONY: release
 release: build
 	docker push ${docker_image}
+
+.PHONY: tag
+tag:
+	git tag ${docker_image_tag}
+	git push origin ${docker_image_tag}
