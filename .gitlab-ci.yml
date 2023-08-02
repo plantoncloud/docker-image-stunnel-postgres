@@ -1,3 +1,0 @@
-include:
-  - project: planton-public/pipeline/magic
-    file: magic.yaml
