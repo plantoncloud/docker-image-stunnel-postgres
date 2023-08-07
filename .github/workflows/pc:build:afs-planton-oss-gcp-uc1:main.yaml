@@ -6,14 +6,13 @@ on:
 
 jobs:
   main:
-    #https://github.com/plantoncloud/gh-workflow-build-docker/blob/main/.github/workflows/build.yaml
-    uses: plantoncloud/gh-workflow-build-docker/.github/workflows/build.yaml@main
+    #https://github.com/plantoncloud/docker-github-workflows/blob/main/.github/workflows/gcp-artifact-registry.build-and-push.yaml
+    uses: plantoncloud/docker-github-workflows/.github/workflows/gcp-artifact-registry.build-and-push.yaml@main
     secrets:
       PLANTON_CLOUD_CLIENT_ID: ${{ secrets.PLANTON_CLOUD_CLIENT_ID }}
       PLANTON_CLOUD_CLIENT_SECRET: ${{ secrets.PLANTON_CLOUD_CLIENT_SECRET }}
     with:
-      PLANTON_CLOUD_CLI_ENVIRONMENT: live
       PLANTON_CLOUD_ARTIFACT_STORE_ID: afs-planton-oss-gcp-uc1
-      PLANTON_CLOUD_ARTIFACT_STORE_DOCKER_REPO_HOSTNAME: us-central1-docker.pkg.dev
-      CONTAINER_IMAGE_NAME: us-central1-docker.pkg.dev/ca-planton-gcp-sh-zg/afs-planton-oss-gcp-uc1-docker/github.com/plantoncloud/docker-image-stunnel-postgres
+      DOCKER_REPO_HOSTNAME: us-central1-docker.pkg.dev
+      CONTAINER_IMAGE_REPO: us-central1-docker.pkg.dev/ca-planton-gcp-sh-zg/afs-planton-oss-gcp-uc1-docker/github.com/plantoncloud/docker-image-stunnel-postgres
       CONTAINER_IMAGE_TAG: ${{ github.sha }}
